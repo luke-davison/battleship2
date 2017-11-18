@@ -1,20 +1,25 @@
 import * as React from 'react';
+
+import AppStore from '../AppStore';
+import Grid from './Grid';
 import './App.css';
 
-// const logo = require('./logo.svg');
-// <img src={logo} className="App-logo" alt="logo" />
+const appStore = new AppStore();
 
 class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <div className="App-header">
-
-          <h2>Welcome to React</h2>
+        <div className="Enemy">
+          <div className="Enemy-Grid">
+            <Grid grid={appStore.enemy.grid}/>
+          </div>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+        <div className="Player">
+          <div className="Player-Grid">
+            <Grid grid={appStore.player.grid}/>
+          </div>
+        </div>
       </div>
     );
   }
