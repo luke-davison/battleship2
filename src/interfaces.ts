@@ -1,18 +1,30 @@
 export interface CellData {
   click: () => void;
-  guess?: number;
-  ship?: number;
+  guess?: string;
+  ship?: string;
   x: number;
   y: number;
 }
 
 export interface PlayerData {
   grid: CellData[][];
-  guesses: Coordinate[];
-  ships: Coordinate[][];
+  guesses: GuessData[];
+  ships: ShipData[];
 }
 
 export interface Coordinate {
   x: number;
   y: number;
+}
+
+export interface ShipData {
+  cells: Coordinate[];
+  hits: Coordinate[];
+  name: string;
+  sunk: boolean;
+}
+
+export interface GuessData {
+  cell: Coordinate;
+  result: string;
 }

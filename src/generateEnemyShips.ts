@@ -1,21 +1,22 @@
-import { Coordinate } from './interfaces';
+import { Coordinate, ShipData } from './interfaces';
+import { shipTypes, gridWidth, gridHeight } from './constants';
 
-function generateEnemyShips(width: number, height: number, ships: number[]): Coordinate[][] {
-  const placements: Coordinate[][] = [];
-  ships.forEach(shipLength => {
-    let ship: Coordinate[] = [];
+function generateEnemyShips(): ShipData[] {
+  const placements: ShipData[] = [];
+  shipTypes.forEach(shipType => {
+    let ship: ShipData = {name: shipType.name, hits: [], cells: [], sunk: false};
     const possiblePlacements: {x: number, y: number, direction: string}[] = [];
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width - shipLength; x++) {
+    for (let y = 0; y < gridHeight; y++) {
+      for (let x = 0; x < gridWidth - shipType.length; x++) {
         possiblePlacements.push({x, y, direction: 'horizontal'});
       }
     }
-    for (let x = 0; x < width; x++) {
-      for (let y = 0; y < height - shipLength; y++) {
+    for (let x = 0; x < gridWidth; x++) {
+      for (let y = 0; y < gridHeight - shipType.length; y++) {
         possiblePlacements.push({x, y, direction: 'vertical'});
       }
     }
-    while (!ship.length) {
+    while (!ship.cells.length) {
       const r = Math.floor(Math.random() * possiblePlacements.length);
       const randomPlacement: {x: number, y: number, direction: string} = possiblePlacements.splice(r, 1)[0];
       const possiblePlacement: Coordinate[] = [];
@@ -25,7 +26,7 @@ function generateEnemyShips(width: number, height: number, ships: number[]): Coo
       } else {
         offsets.y = 1;
       }
-      for (let i = 0; i < shipLength; i++) {
+      for (let i = 0; i < shipType.length; i++) {
         const x = randomPlacement.x + offsets.x * i;
         const y = randomPlacement.y + offsets.y * i;
         possiblePlacement.push({x, y});
@@ -33,7 +34,7 @@ function generateEnemyShips(width: number, height: number, ships: number[]): Coo
       let overlap: boolean = false;
       possiblePlacement.forEach(shipPiece => {
         placements.forEach(placedShip => {
-          placedShip.forEach(placedShipPiece => {
+          placedShip.cells.forEach(placedShipPiece => {
             if (shipPiece.x === placedShipPiece.x && shipPiece.y === placedShipPiece.y) {
               overlap = true;
             }
@@ -41,7 +42,7 @@ function generateEnemyShips(width: number, height: number, ships: number[]): Coo
         });
       });
       if (!overlap) {
-        ship = possiblePlacement;
+        ship.cells = possiblePlacement;
       }
     }
     placements.push(ship);

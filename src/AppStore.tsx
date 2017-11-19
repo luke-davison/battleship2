@@ -1,19 +1,14 @@
 import { CellData, PlayerData } from './interfaces';
 import generateEnemyShips from './generateEnemyShips';
-
-const gridHeight = 9;
-const gridWidth = 11;
-const shipLengths = [5, 4, 3, 3, 2];
+import { gridHeight, gridWidth } from './constants';
 
 class AppStore {
   enemy: PlayerData;
-  height: number = gridHeight;
   phase: string; // options are 'ready', 'placing', 'guessing', 'waiting'
   player: PlayerData;
-  width: number = gridWidth;
 
   constructor() {
-    const enemyShips = generateEnemyShips(gridWidth, gridHeight, shipLengths);
+    const enemyShips = generateEnemyShips();
     this.enemy = {grid: [], guesses: [], ships: enemyShips};
     this.player = {grid: [], guesses: [], ships: []};
     this.phase = 'ready';
@@ -24,9 +19,9 @@ class AppStore {
 
   generateGrid(player: number): CellData[][] {
     const grid: CellData[][] = [];
-    for (let y = 0; y < this.height; y++) {
+    for (let y = 0; y < gridHeight; y++) {
       grid.push([]);
-      for (let x = 0; x < this.width; x++) {
+      for (let x = 0; x < gridWidth; x++) {
         const click = () => this.clickCell(player, x, y);
         const cell = {click, x, y};
         grid[grid.length - 1].push(cell);
