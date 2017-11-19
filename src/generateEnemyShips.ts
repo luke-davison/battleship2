@@ -15,7 +15,7 @@ function generateEnemyShips(width: number, height: number, ships: number[]): Coo
         possiblePlacements.push({x, y, direction: 'vertical'});
       }
     }
-    while (!ship) {
+    while (!ship.length) {
       const r = Math.floor(Math.random() * possiblePlacements.length);
       const randomPlacement: {x: number, y: number, direction: string} = possiblePlacements.splice(r, 1)[0];
       const possiblePlacement: Coordinate[] = [];
@@ -44,7 +44,7 @@ function generateEnemyShips(width: number, height: number, ships: number[]): Coo
         ship = possiblePlacement;
       }
     }
-    placements.push(ship)
+    placements.push(ship);
   });
   
   return placements;
