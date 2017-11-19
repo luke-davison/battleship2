@@ -4,10 +4,6 @@ import AppStore from '../AppStore';
 import Grid from './Grid';
 import './App.css';
 
-const gridHeight = 9;
-const gridWidth = 11;
-const shipLengths = [5, 4, 3, 3, 2];
-
 const appStore = new AppStore();
 
 class App extends React.Component {

@@ -1,5 +1,5 @@
 export interface CellData {
-  click: () => null;
+  click: () => void;
   guess?: number;
   ship?: number;
   x: number;
