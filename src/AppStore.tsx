@@ -1,4 +1,4 @@
-import { CellData, PlayerData } from './interfaces';
+import { CellData, PlayerData, ShipData } from './interfaces';
 import generateEnemyShips from './generateEnemyShips';
 import { gridHeight, gridWidth } from './constants';
 
@@ -23,7 +23,24 @@ class AppStore {
       grid.push([]);
       for (let x = 0; x < gridWidth; x++) {
         const click = () => this.clickCell(player, x, y);
-        const cell = {click, x, y};
+        const cell: CellData = {click, x, y};
+        if (player === 1) {
+          const guessed = this.player.guesses.find(guess => guess.cell.x === x && guess.cell.y === y);
+          if (guessed) {
+            cell.guess = guessed.result;
+          }
+        } else {
+          const guessed = this.enemy.guesses.find(guess => guess.cell.x === x && guess.cell.y === y);
+          if (guessed) {
+            cell.guess = guessed.result;
+          }
+          const ship = this.player.ships.find(fullShip => {
+            return !!fullShip.cells.find(shipCell => shipCell.x === x && shipCell.y === y);
+          });
+          if (ship) {
+            cell.ship = ship.name;
+          }
+        }
         grid[grid.length - 1].push(cell);
       }
     }
