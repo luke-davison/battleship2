@@ -13,6 +13,8 @@ class AppStore {
     this.player = {grid: [], guesses: [], ships: []};
     this.phase = 'ready';
 
+    this.enemy.grid = this.generateGrid(1);
+
     this.generateGrid = this.generateGrid.bind(this);
     this.clickCell = this.clickCell.bind(this);
   }
@@ -28,11 +30,11 @@ class AppStore {
         let ships: ShipData[];
         if (player === 1) {
           guesses = this.player.guesses;
-          if (this.phase === 'reveal') {
-            ships = this.enemy.ships;
-          } else {
-            ships = [];
-          }
+          // if (this.phase === 'reveal') {
+          ships = this.enemy.ships;
+          // } else {
+          //   ships = [];
+          // }
         } else {
           guesses = this.enemy.guesses;
           ships = this.player.ships;
@@ -45,6 +47,7 @@ class AppStore {
           return !!fullShip.cells.find(shipCell => shipCell.x === x && shipCell.y === y);
         });
         if (ship) {
+          console.log('happening');
           cell.ship = ship.name;
         }
         grid[grid.length - 1].push(cell);

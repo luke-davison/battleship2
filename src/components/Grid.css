@@ -1,0 +1,24 @@
+.Grid {
+  width: 55vh;
+  height: 45vh;
+
+}
+
+.Grid-table {
+  width: 100%;
+  height: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.Grid-table td {
+  width: Calc(100% / 11);
+  height: Calc(100% / 9);
+  border: 1px solid black;
+}
+
+.Ship {
+  width: 100%;
+  height: 100%;
+  background-color: brown;
+}
