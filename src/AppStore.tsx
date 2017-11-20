@@ -9,11 +9,13 @@ class AppStore {
 
   constructor() {
     const enemyShips = generateEnemyShips();
+    const playerShips = generateEnemyShips(); // Temporary
     this.enemy = {grid: [], guesses: [], ships: enemyShips};
-    this.player = {grid: [], guesses: [], ships: []};
+    this.player = {grid: [], guesses: [], ships: playerShips};
     this.phase = 'ready';
 
     this.enemy.grid = this.generateGrid(1);
+    this.player.grid = this.generateGrid(0);
 
     this.generateGrid = this.generateGrid.bind(this);
     this.clickCell = this.clickCell.bind(this);

@@ -9,8 +9,19 @@ class Grid extends React.Component<{grid: CellData[][]}, {} > {
       <div className="Grid">
         <table className="Grid-table">
           <tbody>
+            <tr className="col-numbers">
+              <td />
+              {this.props.grid[0].map((cell, columnID) => (
+                <td className="col-number">
+                  {String.fromCharCode(97 + columnID)}
+                </td>
+              ))}
+            </tr>
             {this.props.grid.map((row, rowId) => (
               <tr key={rowId}>
+                <td className="row-number">
+                  {rowId + 1}
+                </td>
                 {row.map(cell => (
                   <td className="Cell" key={cell.x} onClick={cell.click}>
                     {cell.ship && <div className="Ship" />}

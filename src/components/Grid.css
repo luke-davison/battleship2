@@ -1,6 +1,6 @@
 .Grid {
-  width: 55vh;
-  height: 45vh;
+  width: 60vh;
+  height: 48vh;
 
 }
 
@@ -12,8 +12,8 @@
 }
 
 .Grid-table td {
-  width: Calc(100% / 11);
-  height: Calc(100% / 9);
+  width: Calc(100% / 12);
+  height: Calc(100% / 10);
   border: 1px solid black;
 }
 
