@@ -1,10 +1,10 @@
 import generateEnemyShips from './generateEnemyShips';
 import { Coordinate, ShipData } from './interfaces';
-import { gridHeight, gridWidth, shipTypes} from './constants';
+import { gridHeight, gridWidth, shipTypes } from './constants';
 
 // these tests are run multiple times as the function generates random results
 // which may cause a test to pass sometimes and fail others
-const numberOfTimesToRun = 20;
+const numberOfTimesToRun = 100;
 
 const results: ShipData[][] = [];
 for (let i = 0; i < numberOfTimesToRun; i++) {

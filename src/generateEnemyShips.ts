@@ -1,7 +1,7 @@
 import { Coordinate, ShipData } from './interfaces';
 import { shipTypes, gridWidth, gridHeight } from './constants';
 
-function generateEnemyShips(): ShipData[] {
+function generateEnemyShipPlacements(): ShipData[] {
   const placements: ShipData[] = [];
   shipTypes.forEach(shipType => {
     let ship: ShipData = {name: shipType.name, hits: [], cells: [], sunk: false};
@@ -31,17 +31,17 @@ function generateEnemyShips(): ShipData[] {
         const y = randomPlacement.y + offsets.y * i;
         possiblePlacement.push({x, y});
       }
-      let overlap: boolean = false;
+      let overlaping: boolean = false;
       possiblePlacement.forEach(shipPiece => {
         placements.forEach(placedShip => {
           placedShip.cells.forEach(placedShipPiece => {
             if (shipPiece.x === placedShipPiece.x && shipPiece.y === placedShipPiece.y) {
-              overlap = true;
+              overlaping = true;
             }
           });
         });
       });
-      if (!overlap) {
+      if (!overlaping) {
         ship.cells = possiblePlacement;
       }
     }
@@ -51,4 +51,4 @@ function generateEnemyShips(): ShipData[] {
   return placements;
 }
 
-export default generateEnemyShips;
+export default generateEnemyShipPlacements;
