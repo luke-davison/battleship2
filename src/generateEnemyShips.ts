@@ -1,54 +1,71 @@
 import { Coordinate, ShipData } from './interfaces';
 import { shipTypes, gridWidth, gridHeight } from './constants';
 
-function generateEnemyShipPlacements(): ShipData[] {
-  const placements: ShipData[] = [];
-  shipTypes.forEach(shipType => {
-    let ship: ShipData = {name: shipType.name, hits: [], cells: [], sunk: false};
-    const possiblePlacements: {x: number, y: number, direction: string}[] = [];
-    for (let y = 0; y < gridHeight; y++) {
-      for (let x = 0; x < gridWidth - shipType.length; x++) {
-        possiblePlacements.push({x, y, direction: 'horizontal'});
-      }
-    }
-    for (let x = 0; x < gridWidth; x++) {
-      for (let y = 0; y < gridHeight - shipType.length; y++) {
-        possiblePlacements.push({x, y, direction: 'vertical'});
-      }
-    }
-    while (!ship.cells.length) {
-      const r = Math.floor(Math.random() * possiblePlacements.length);
-      const randomPlacement: {x: number, y: number, direction: string} = possiblePlacements.splice(r, 1)[0];
-      const possiblePlacement: Coordinate[] = [];
-      const offsets = {x: 0, y: 0};
-      if (randomPlacement.direction === 'horizontal') {
-        offsets.x = 1;
-      } else {
-        offsets.y = 1;
-      }
-      for (let i = 0; i < shipType.length; i++) {
-        const x = randomPlacement.x + offsets.x * i;
-        const y = randomPlacement.y + offsets.y * i;
-        possiblePlacement.push({x, y});
-      }
-      let overlaping: boolean = false;
-      possiblePlacement.forEach(shipPiece => {
-        placements.forEach(placedShip => {
-          placedShip.cells.forEach(placedShipPiece => {
-            if (shipPiece.x === placedShipPiece.x && shipPiece.y === placedShipPiece.y) {
-              overlaping = true;
-            }
-          });
-        });
-      });
-      if (!overlaping) {
-        ship.cells = possiblePlacement;
-      }
-    }
-    placements.push(ship);
-  });
-  
+interface PlacementData {
+  x: number;
+  y: number;
+  direction: string;
+}
+
+export default function generateEnemyShipPlacements(): ShipData[] {
+  return shipTypes.reduce(generateNewPlacement, []);
+}
+
+function generateNewPlacement(placements: ShipData[], shipType: {name: string, length: number}): ShipData[] {
+  let ship: ShipData = {name: shipType.name, hits: [], cells: [], sunk: false};
+  const possiblePlacements = generatePossiblePlacements(shipType.length);
+  let randomPosition: Coordinate[] = pickRandomPosition(possiblePlacements, shipType.length);
+  while (positionOverlaps(placements, randomPosition)) {
+    randomPosition = pickRandomPosition(possiblePlacements, shipType.length);
+  }
+  ship.cells = randomPosition;
+  placements.push(ship);
   return placements;
 }
 
-export default generateEnemyShipPlacements;
+function generatePossiblePlacements(shipLength: number): PlacementData[] {
+  const possiblePlacements: PlacementData[] = [];
+  for (let y = 0; y < gridHeight; y++) {
+    for (let x = 0; x < gridWidth - shipLength; x++) {
+      possiblePlacements.push({x, y, direction: 'horizontal'});
+    }
+  }
+  for (let x = 0; x < gridWidth; x++) {
+    for (let y = 0; y < gridHeight - shipLength; y++) {
+      possiblePlacements.push({x, y, direction: 'vertical'});
+    }
+  }
+  return possiblePlacements;
+}
+
+function pickRandomPosition(possiblePlacements: PlacementData[], shipLength: number): Coordinate[] {
+  const r = Math.floor(Math.random() * possiblePlacements.length);
+  const randomPlacement = possiblePlacements.splice(r, 1)[0];
+  const randomPosition: Coordinate[] = [];
+  const offsets = {x: 0, y: 0};
+  if (randomPlacement.direction === 'horizontal') {
+    offsets.x = 1;
+  } else {
+    offsets.y = 1;
+  }
+  for (let i = 0; i < shipLength; i++) {
+    const x = randomPlacement.x + offsets.x * i;
+    const y = randomPlacement.y + offsets.y * i;
+    randomPosition.push({x, y});
+  }
+  return randomPosition;
+}
+
+function positionOverlaps(placements: ShipData[], placement: Coordinate[]): boolean {
+  let overlaping: boolean = false;
+  placement.forEach(shipPiece => {
+    placements.forEach(placedShip => {
+      placedShip.cells.forEach(placedShipPiece => {
+        if (shipPiece.x === placedShipPiece.x && shipPiece.y === placedShipPiece.y) {
+          overlaping = true;
+        }
+      });
+    });
+  });
+  return overlaping;
+}
