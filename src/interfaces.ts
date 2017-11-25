@@ -28,3 +28,8 @@ export interface GuessData {
   cell: Coordinate;
   result: string;
 }
+
+export interface ShipType {
+  name: string;
+  length: number;
+}

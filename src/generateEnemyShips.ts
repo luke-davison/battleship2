@@ -1,4 +1,4 @@
-import { Coordinate, ShipData } from './interfaces';
+import { Coordinate, ShipData, ShipType } from './interfaces';
 import { shipTypes, gridWidth, gridHeight } from './constants';
 
 interface PlacementData {
@@ -7,18 +7,17 @@ interface PlacementData {
   direction: string;
 }
 
-export default function generateEnemyShipPlacements(): ShipData[] {
-  return shipTypes.reduce(generateNewPlacement, []);
+export default function generateEnemyShips(): ShipData[] {
+  return shipTypes.reduce(generateNewShip, []);
 }
 
-function generateNewPlacement(placements: ShipData[], shipType: {name: string, length: number}): ShipData[] {
-  let ship: ShipData = {name: shipType.name, hits: [], cells: [], sunk: false};
-  const possiblePlacements = generatePossiblePlacements(shipType.length);
-  let randomPosition: Coordinate[] = pickRandomPosition(possiblePlacements, shipType.length);
+function generateNewShip(placements: ShipData[], shipType: ShipType): ShipData[] {
+  const allPossiblePlacements = generatePossiblePlacements(shipType.length);
+  let randomPosition: Coordinate[] = pickRandomPosition(allPossiblePlacements, shipType.length);
   while (positionOverlaps(placements, randomPosition)) {
-    randomPosition = pickRandomPosition(possiblePlacements, shipType.length);
+    randomPosition = pickRandomPosition(allPossiblePlacements, shipType.length);
   }
-  ship.cells = randomPosition;
+  const ship: ShipData = {name: shipType.name, hits: [], cells: randomPosition, sunk: false};
   placements.push(ship);
   return placements;
 }
